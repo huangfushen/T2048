@@ -20,9 +20,9 @@ public class GridManage : MonoBehaviour
     private static float verticalSpacingOffset = 1.65f;
     // 边框间距 
     private static float borderSpacing = 0.1f;
-    // 半平铺宽度
+    // 半个瓦片宽度
     private static float halfTileWidth = 0.55f;
-    // 瓦片间的空间
+    // 瓦片间的中心点位置
     private static float spaceBetweenTiles = 1.1f;
     
     // 分数
@@ -123,28 +123,197 @@ public class GridManage : MonoBehaviour
      */
     private bool MoveTilesLeft()
     {
-        return false;
+        bool hasMoved = false;
+        for (int x = 1; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                GameObject obj = GetObjectAtGridPosition(x, y);
+        
+                if (obj == noTile) {
+                    continue;
+                }
+        
+                Vector2 raycastOrigin = obj.transform.position;
+                raycastOrigin.x -= halfTileWidth;
+                //射线
+                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, -Vector2.right, Mathf.Infinity);
+                if (hit.collider != null) {
+                    GameObject hitObject = hit.collider.gameObject;
+                    if (hitObject != obj) {
+                        if (hitObject.CompareTag("Tile")) {
+                            Tile thatTile = hitObject.GetComponent<Tile>();
+                            Tile thisTile = obj.GetComponent<Tile>();
+                            if (CanUpgrade(thisTile, thatTile)) {
+                                UpgradeTile(obj, thisTile, hitObject, thatTile);
+                                hasMoved = true;
+                            } else {
+                                Vector3 newPosition = hitObject.transform.position;
+                                newPosition.x += spaceBetweenTiles;
+                                if (!Mathf.Approximately(obj.transform.position.x, newPosition.x)) {
+                                    obj.transform.position = newPosition;
+                                    hasMoved = true;
+                                }
+                            }
+                        } else if (hitObject.CompareTag("Border")) {
+                            Vector3 newPosition = obj.transform.position;
+                            newPosition.x = hit.point.x + halfTileWidth + borderOffset;
+                            if (!Mathf.Approximately(obj.transform.position.x, newPosition.x)) {
+                                obj.transform.position = newPosition;
+                                hasMoved = true;
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+    
+        return hasMoved;
     }
     /**
      * 向右移动
      */
     private bool MoveTilesRight()
     {
-        return false;
+        bool hasMoved = false;
+        for (int x = cols - 1; x >= 0; x--) {
+            for (int y = 0; y < rows; y++) {
+                GameObject obj = GetObjectAtGridPosition(x, y);
+        
+                if (obj == noTile) {
+                    continue;
+                }
+        
+                Vector2 raycastOrigin = obj.transform.position;
+                raycastOrigin.x += halfTileWidth;
+                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.right, Mathf.Infinity);
+                if (hit.collider != null) {
+                    GameObject hitObject = hit.collider.gameObject;
+                    if (hitObject != obj) {
+                        if (hitObject.tag == "Tile") {
+                            Tile thatTile = hitObject.GetComponent<Tile>();
+                            Tile thisTile = obj.GetComponent<Tile>();
+                            if (CanUpgrade(thisTile, thatTile)) {
+                                UpgradeTile(obj, thisTile, hitObject, thatTile);
+                                hasMoved = true;
+                            } else {
+                                Vector3 newPosition = hitObject.transform.position;
+                                newPosition.x -= spaceBetweenTiles;
+                                if (!Mathf.Approximately(obj.transform.position.x, newPosition.x)) {
+                                    obj.transform.position = newPosition;
+                                    hasMoved = true;
+                                }
+                            }
+                        } else if (hitObject.tag == "Border") {
+                            Vector3 newPosition = obj.transform.position;
+                            newPosition.x = hit.point.x - halfTileWidth - borderOffset;
+                            if (!Mathf.Approximately(obj.transform.position.x, newPosition.x)) {
+                                obj.transform.position = newPosition;
+                                hasMoved = true;
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+    
+        return hasMoved;
     }
     /**
      * 向上移动
      */
     private bool MoveTilesUp()
     {
-        return false;
+        bool hasMoved = false;
+        for (int y = 1; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                GameObject obj = GetObjectAtGridPosition(x, y);
+        
+                if (obj == noTile) {
+                    continue;
+                }
+        
+                Vector2 raycastOrigin = obj.transform.position;
+                raycastOrigin.y += halfTileWidth;
+                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.up, Mathf.Infinity);
+                if (hit.collider != null) {
+                    GameObject hitObject = hit.collider.gameObject;
+                    if (hitObject != obj) {
+                        if (hitObject.tag == "Tile") {
+                            Tile thatTile = hitObject.GetComponent<Tile>();
+                            Tile thisTile = obj.GetComponent<Tile>();
+                            if (CanUpgrade(thisTile, thatTile)) {
+                                UpgradeTile(obj, thisTile, hitObject, thatTile);
+                                hasMoved = true;
+                            } else {
+                                Vector3 newPosition = hitObject.transform.position;
+                                newPosition.y -= spaceBetweenTiles;
+                                if (!Mathf.Approximately(obj.transform.position.y, newPosition.y)) {
+                                    obj.transform.position = newPosition;
+                                    hasMoved = true;
+                                }
+                            }
+                        } else if (hitObject.tag == "Border") {
+                            Vector3 newPosition = obj.transform.position;
+                            newPosition.y = hit.point.y - halfTileWidth - borderOffset;
+                            if (!Mathf.Approximately(obj.transform.position.y, newPosition.y)) {
+                                obj.transform.position = newPosition;
+                                hasMoved = true;
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+  
+        return hasMoved;
     }
     /**
      * 向下移动
      */
     private bool MoveTilesDown()
     {
-        return false;
+        bool hasMoved = false;
+        for (int y = rows - 1; y >= 0; y--) {
+            for (int x = 0; x < cols; x++) {
+                GameObject obj = GetObjectAtGridPosition(x, y);
+        
+                if (obj == noTile) {
+                    continue;
+                }
+        
+                Vector2 raycastOrigin = obj.transform.position;
+                raycastOrigin.y -= halfTileWidth;
+                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, -Vector2.up, Mathf.Infinity);
+                if (hit.collider != null) {
+                    GameObject hitObject = hit.collider.gameObject;
+                    if (hitObject != obj) {
+                        if (hitObject.tag == "Tile") {
+                            Tile thatTile = hitObject.GetComponent<Tile>();
+                            Tile thisTile = obj.GetComponent<Tile>();
+                            if (CanUpgrade(thisTile, thatTile)) {
+                                UpgradeTile(obj, thisTile, hitObject, thatTile);
+                                hasMoved = true;
+                            } else {
+                                Vector3 newPosition = hitObject.transform.position;
+                                newPosition.y += spaceBetweenTiles;
+                                if (!Mathf.Approximately(obj.transform.position.y, newPosition.y)) {
+                                    obj.transform.position = newPosition;
+                                    hasMoved = true;
+                                }
+                            }
+                        } else if (hitObject.tag == "Border") {
+                            Vector3 newPosition = obj.transform.position;
+                            newPosition.y = hit.point.y + halfTileWidth + borderOffset;
+                            if (!Mathf.Approximately(obj.transform.position.y, newPosition.y)) {
+                                obj.transform.position = newPosition;
+                                hasMoved = true;
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+    
+        return hasMoved;
     }
 
     /**
@@ -214,7 +383,7 @@ public class GridManage : MonoBehaviour
     }
 
     /**
-     * 校验是否能向左移动
+     * 校验是否能移动
      */
     private bool CheckForMovesLeft()
     {
@@ -267,6 +436,38 @@ public class GridManage : MonoBehaviour
     private static Vector2 GridToWorldPoint(int x, int y) {
         return new Vector2(x + horizontalSpacingOffset + borderSpacing * x, 
             -y + verticalSpacingOffset - borderSpacing * y);
+    }
+    /**
+     * 判断是否可以合并
+     */
+    private bool CanUpgrade(Tile thisTile, Tile thatTile) {
+        return (thisTile.value != maxValue && thisTile.power == thatTile.power && !thisTile.upgradedThisTurn && !thatTile.upgradedThisTurn);
+    }
+ 
+    
+    /**
+     * 合并
+     */
+    private void UpgradeTile(GameObject toDestroy, Tile destroyTile, GameObject toUpgrade, Tile upgradeTile) {
+        Vector3 toUpgradePosition = toUpgrade.transform.position;
+
+        tiles.Remove(toDestroy);
+        tiles.Remove(toUpgrade);
+
+        SimplePool.Despawn(toDestroy);
+        SimplePool.Despawn(toUpgrade);
+
+        // create the upgraded tile
+        GameObject newTile = SimplePool.Spawn(tilePrefabs[upgradeTile.power], toUpgradePosition, transform.rotation);
+        tiles.Add(newTile);
+        Tile tile = newTile.GetComponent<Tile>();
+        tile.upgradedThisTurn = true;
+
+        points += upgradeTile.value * 2;
+        scoreText.text = points.ToString();
+
+        TileAnimationHandler tileAnim = newTile.GetComponent<TileAnimationHandler>();
+        tileAnim.AnimateUpgrade();
     }
 
 }
