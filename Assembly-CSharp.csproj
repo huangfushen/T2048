@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\GridManage.cs" />
+    <Compile Include="Assets\Script\Main.cs" />
     <Compile Include="Assets\Script\SimplePool.cs" />
     <Compile Include="Assets\Script\Tile.cs" />
     <Compile Include="Assets\Script\TileAnimationHandler.cs" />

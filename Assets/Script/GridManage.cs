@@ -32,8 +32,7 @@ public class GridManage : MonoBehaviour
     private Rect resetButton;
     // 游戏结束按钮
     private Rect gameOverButton;
-    // 触摸起始位置
-    private Vector2 touchStartPosition = Vector2.zero;  
+
     // 最大值
     public int maxValue = 2048;
     
@@ -45,9 +44,7 @@ public class GridManage : MonoBehaviour
     public GameObject[] tilePrefabs;
     // 背景层
     public LayerMask backgroundLayer;
-    // 最小滑动距离
-    public float minSwipeDistance = 10.0f;
-    
+
     // 枚举（状态）
     private enum State {
         Loaded, 
@@ -73,6 +70,8 @@ public class GridManage : MonoBehaviour
                 break;
             case State.Loaded:
                 state = State.WaitingForInput;
+                GenerateRandomTile();
+                GenerateRandomTile();
                 break;
             case State.WaitingForInput:
                 InputKeyBox();
@@ -139,7 +138,7 @@ public class GridManage : MonoBehaviour
                 if (hit.collider != null) {
                     GameObject hitObject = hit.collider.gameObject;
                     if (hitObject != obj) {
-                        if (hitObject.CompareTag("Tile")) {
+                        if (hitObject.tag == "Tile") {
                             Tile thatTile = hitObject.GetComponent<Tile>();
                             Tile thisTile = obj.GetComponent<Tile>();
                             if (CanUpgrade(thisTile, thatTile)) {
@@ -153,7 +152,7 @@ public class GridManage : MonoBehaviour
                                     hasMoved = true;
                                 }
                             }
-                        } else if (hitObject.CompareTag("Border")) {
+                        } else if (hitObject.tag == "Border") {
                             Vector3 newPosition = obj.transform.position;
                             newPosition.x = hit.point.x + halfTileWidth + borderOffset;
                             if (!Mathf.Approximately(obj.transform.position.x, newPosition.x)) {
@@ -173,15 +172,14 @@ public class GridManage : MonoBehaviour
      */
     private bool MoveTilesRight()
     {
+    
         bool hasMoved = false;
         for (int x = cols - 1; x >= 0; x--) {
             for (int y = 0; y < rows; y++) {
                 GameObject obj = GetObjectAtGridPosition(x, y);
-        
                 if (obj == noTile) {
                     continue;
                 }
-        
                 Vector2 raycastOrigin = obj.transform.position;
                 raycastOrigin.x += halfTileWidth;
                 RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.right, Mathf.Infinity);
@@ -336,9 +334,12 @@ public class GridManage : MonoBehaviour
      */
     public void GenerateRandomTile()
     {
+        Debug.Log(tiles.Count);
         // 校验图块个数
-        if (tiles.Count >= rows * cols) {
-            throw new UnityException("生成的图块过多，运行异常");
+        if (tiles.Count > rows * cols)
+        {
+            return ;
+            // throw new UnityException("生成的图块过多，运行异常");
         }
         // 生成最新图块的值 90%-2 10%-4
         int value;
@@ -457,7 +458,7 @@ public class GridManage : MonoBehaviour
         SimplePool.Despawn(toDestroy);
         SimplePool.Despawn(toUpgrade);
 
-        // create the upgraded tile
+   
         GameObject newTile = SimplePool.Spawn(tilePrefabs[upgradeTile.power], toUpgradePosition, transform.rotation);
         tiles.Add(newTile);
         Tile tile = newTile.GetComponent<Tile>();
