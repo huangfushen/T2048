@@ -334,7 +334,6 @@ public class GridManage : MonoBehaviour
      */
     public void GenerateRandomTile()
     {
-        Debug.Log(tiles.Count);
         // 校验图块个数
         if (tiles.Count > rows * cols)
         {
@@ -389,6 +388,7 @@ public class GridManage : MonoBehaviour
     private bool CheckForMovesLeft()
     {
         // 校验是否满格了
+        Debug.Log(tiles.Count);
         if (tiles.Count < rows * cols) {
             return true;
         }
@@ -451,14 +451,13 @@ public class GridManage : MonoBehaviour
      */
     private void UpgradeTile(GameObject toDestroy, Tile destroyTile, GameObject toUpgrade, Tile upgradeTile) {
         Vector3 toUpgradePosition = toUpgrade.transform.position;
-
+        // 合并移除两个
         tiles.Remove(toDestroy);
         tiles.Remove(toUpgrade);
-
         SimplePool.Despawn(toDestroy);
         SimplePool.Despawn(toUpgrade);
 
-   
+        // 新创建一个
         GameObject newTile = SimplePool.Spawn(tilePrefabs[upgradeTile.power], toUpgradePosition, transform.rotation);
         tiles.Add(newTile);
         Tile tile = newTile.GetComponent<Tile>();

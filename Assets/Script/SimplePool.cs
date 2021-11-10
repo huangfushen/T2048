@@ -94,7 +94,6 @@ public class SimplePool : MonoBehaviour
 	static public void Despawn(GameObject obj) {
 		PoolMember pm = obj.GetComponent<PoolMember>();
 		if(pm == null) {
-			Debug.Log ("对象 '"+obj.name+"' 不在池中，不能销毁它");
 			GameObject.Destroy(obj);
 		}
 		else {
