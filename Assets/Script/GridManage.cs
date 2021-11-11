@@ -388,7 +388,6 @@ public class GridManage : MonoBehaviour
     private bool CheckForMovesLeft()
     {
         // 校验是否满格了
-        Debug.Log(tiles.Count);
         if (tiles.Count < rows * cols) {
             return true;
         }
