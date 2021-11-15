@@ -15,7 +15,9 @@ public class GridManage : MonoBehaviour
     private static int lowestNewTileValue = 2;
     private static int highestNewTileValue = 4;
     
+    // 每个瓦片间的间距
     private static float borderOffset = 0.05f;
+    // 边界值
     private static float horizontalSpacingOffset = -1.65f;
     private static float verticalSpacingOffset = 1.65f;
     // 边框间距 
@@ -42,8 +44,6 @@ public class GridManage : MonoBehaviour
     public Text scoreText;
     // 瓦片预制体
     public GameObject[] tilePrefabs;
-    // 背景层
-    public LayerMask backgroundLayer;
 
     // 枚举（状态）
     private enum State {
@@ -57,12 +57,15 @@ public class GridManage : MonoBehaviour
     
     void Awake()
     {
+        // 瓦片列表
         tiles = new List<GameObject>();
+        // 初始化状态
         state = State.Loaded;
     }
     
     void Update()
     {
+        // 根据状态判断执行操作
         switch (state)
         {
             case State.GameOver:
@@ -79,6 +82,7 @@ public class GridManage : MonoBehaviour
             case State.CheckingMatches:
                 // 生成随机图块
                 GenerateRandomTile();
+                // 判断是否可以移动（合成）
                 if (CheckForMovesLeft()) {
                     ReadyTilesForUpgrading();
                     state = State.WaitingForInput;
@@ -335,10 +339,10 @@ public class GridManage : MonoBehaviour
     public void GenerateRandomTile()
     {
         // 校验图块个数
-        if (tiles.Count > rows * cols)
+        if (tiles.Count >= rows * cols)
         {
-            return ;
-            // throw new UnityException("生成的图块过多，运行异常");
+            // return ;
+            throw new UnityException("生成的图块过多，运行异常");
         }
         // 生成最新图块的值 90%-2 10%-4
         int value;
@@ -437,6 +441,12 @@ public class GridManage : MonoBehaviour
         return new Vector2(x + horizontalSpacingOffset + borderSpacing * x, 
             -y + verticalSpacingOffset - borderSpacing * y);
     }
+    
+    private static Vector2 WorldToGridPoint(float x, float y) {
+        return new Vector2((x - horizontalSpacingOffset) / (1 + borderSpacing),
+            (y - verticalSpacingOffset) / -(1 + borderSpacing));
+    }
+    
     /**
      * 判断是否可以合并
      */
@@ -444,7 +454,7 @@ public class GridManage : MonoBehaviour
         return (thisTile.value != maxValue && thisTile.power == thatTile.power && !thisTile.upgradedThisTurn && !thatTile.upgradedThisTurn);
     }
  
-    
+  
     /**
      * 合并
      */

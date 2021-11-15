@@ -2483,7 +2483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1658696921
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2518,7 +2518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.38848346, g: 0.5943151, b: 0.8490566, a: 1}
+  m_Color: {r: 0.38823533, g: 0.8509804, b: 0.8474317, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

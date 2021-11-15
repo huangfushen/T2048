@@ -16,17 +16,19 @@ public class SimplePool : MonoBehaviour
 		
 		GameObject prefab;
 		
+		// 堆栈
 		public Pool(GameObject prefab, int initialQty) {
 			this.prefab = prefab;
 			
 			inactive = new Stack<GameObject>(initialQty);
 		}
 		
-		// 出栈
+		// 出栈（将池中的预制体拿出）
 		public GameObject Spawn(Vector3 pos, Quaternion rot) {
 			GameObject obj;
+			// 如果栈内无元素
 			if(inactive.Count==0) {
-	
+				// 生成预制体
 				obj = (GameObject)GameObject.Instantiate(prefab, pos, rot);
 				obj.name = prefab.name + " ("+(nextId++)+")";
 				obj.AddComponent<PoolMember>().myPool = this;
@@ -44,7 +46,7 @@ public class SimplePool : MonoBehaviour
 			
 		}
 		
-		// 入栈
+		// 入栈（将移除的预制体放入池中）
 		public void Despawn(GameObject obj) {
 			obj.SetActive(false);
 			inactive.Push(obj);
@@ -57,7 +59,7 @@ public class SimplePool : MonoBehaviour
 		public Pool myPool;
 	}
 	
-	//所有的池子
+	//所有的池子（以字典的形式保存）
 	static Dictionary< GameObject, Pool > pools;
 	
 	// 初始化所有的池子
@@ -84,13 +86,14 @@ public class SimplePool : MonoBehaviour
 		}
 	}
 	
+	// 出栈
 	static public GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot) {
 		Init(prefab);
 		
 		return pools[prefab].Spawn(pos, rot);
 	}
 	
-
+	// 入栈
 	static public void Despawn(GameObject obj) {
 		PoolMember pm = obj.GetComponent<PoolMember>();
 		if(pm == null) {

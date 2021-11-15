@@ -8,7 +8,7 @@ public class TileAnimationHandler : MonoBehaviour
     public float scaleSpeed;
     // 增长大小
     public float growSize;
-    
+    // 瓦片位置
     private Transform _transform;
     // 增长向量
     private Vector3 _growVector;
