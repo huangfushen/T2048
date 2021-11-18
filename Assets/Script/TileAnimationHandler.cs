@@ -13,7 +13,7 @@ public class TileAnimationHandler : MonoBehaviour
     // 增长向量
     private Vector3 _growVector;
     // 瓦片大小
-    private Vector3 size = new Vector3(0.4f, 0.4f, 0.4f);
+    private Vector3 size = new Vector3(0.43f, 0.43f, 0.43f);
     /**
      * 动画入口
      */
@@ -36,24 +36,23 @@ public class TileAnimationHandler : MonoBehaviour
         }
         
         _transform.localScale = new Vector3(0.25f, 0.25f, 1f);
-        while (_transform.localScale.x < 0.4f) {
+        while (_transform.localScale.x < 0.43f) {
             _transform.localScale = Vector3.MoveTowards(_transform.localScale, size, scaleSpeed * Time.deltaTime);
             yield return null;
         }
     }
     
     private IEnumerator AnimationUpgrade() {
-        Debug.Log("被移动了");
         while (_transform == null) {
             yield return null;
         }
 
-        while (_transform.localScale.x > 0.4f + growSize) {
+        while (_transform.localScale.x > 0.43f + growSize) {
             _transform.localScale = Vector3.MoveTowards(_transform.localScale, size+_growVector , scaleSpeed * Time.deltaTime);
             yield return null;
         }
 
-        while (_transform.localScale.x < 0.4f) {
+        while (_transform.localScale.x < 0.43f) {
             _transform.localScale = Vector3.MoveTowards(_transform.localScale, size, scaleSpeed * Time.deltaTime);
             yield return null;
         }

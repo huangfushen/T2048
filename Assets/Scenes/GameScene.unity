@@ -807,7 +807,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 292527302}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1694311238}
+        m_MethodName: Reset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &292527302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -894,7 +905,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -2503,7 +2514,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 5}
-  m_SizeDelta: {x: 250, y: 150}
+  m_SizeDelta: {x: 380, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1658696922
 MonoBehaviour:
@@ -2602,9 +2613,6 @@ MonoBehaviour:
   - {fileID: 4622687195764771453, guid: cfcd3511af915ac4181814d92fa7da6f, type: 3}
   - {fileID: 5565714242662280348, guid: 57105333f36b92b4faeedcc4fc013d57, type: 3}
   - {fileID: 4671781875854349909, guid: 76d7ec9b17cc20445bcc9acfc6eb50af, type: 3}
-  backgroundLayer:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!1001 &1784030941
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2774,7 +2782,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
@@ -2798,7 +2806,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2085800817}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!4 &2085800820
 Transform:
   m_ObjectHideFlags: 0

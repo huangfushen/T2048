@@ -63,7 +63,7 @@ public class GridManage : MonoBehaviour
         state = State.Loaded;
     }
     
-    void Update()
+    void LateUpdate()
     {
         // 根据状态判断执行操作
         switch (state)
