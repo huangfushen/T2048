@@ -46,7 +46,7 @@ public class GridManage : MonoBehaviour
     public GameObject[] tilePrefabs;
 
     // 枚举（状态）
-    private enum State {
+    public enum State {
         Loaded, 
         WaitingForInput, 
         CheckingMatches,
@@ -98,25 +98,25 @@ public class GridManage : MonoBehaviour
      */
     private void InputKeyBox()
     {
-        if (Input.GetKeyDown(KeyCode.A)) {
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
             if (MoveTilesLeft()) {
                 state = State.CheckingMatches;
             }
-        } else if (Input.GetKeyDown(KeyCode.D)) {
+        } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
             if (MoveTilesRight()) {
                 state = State.CheckingMatches;
             }
-        } else if (Input.GetKeyDown(KeyCode.W)) {
+        } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
             if (MoveTilesUp()) {
                 state = State.CheckingMatches;
             }
-        } else if (Input.GetKeyDown(KeyCode.S)) {
+        } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
             if (MoveTilesDown()) {
                 state = State.CheckingMatches;
             }
         } else if (Input.GetKeyDown(KeyCode.Q)) {
             Reset();
-        } else if (Input.GetKeyDown(KeyCode.R)) {
+        } else if (Input.GetKeyDown(KeyCode.Escape)) {
             Application.Quit();
         }
     }
